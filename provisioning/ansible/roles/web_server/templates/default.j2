@@ -15,25 +15,15 @@ server {
     listen 80 default_server;
     listen [::]:80 default_server ipv6only=on;
 
-    root /opt/www/;
+    root /opt/www/web/;
     index index.php index_dev.php app.php app_dev.php;
 
     server_name localhost;
 
-    location ~* ^/website/var/assets {
-        try_files $uri /index.php?$args;
-        index index.php;
-    }
-
-    location ~* ^/website/static/videos {
-        try_files $uri /index.php?$args;
-        index index.php;
-    }
-
     location / {
         satisfy any;
 
-        try_files $uri $uri/ /website/var/assets/$uri /website/static/videos/$uri /index.php?$args;
+        try_files $uri $uri/ /app.php?$args;
     }
 
     location ~ \.php$ {
@@ -52,27 +42,17 @@ server {
 server {
     listen 443 ssl;
 
-    root /opt/www/;
+    root /opt/www/web/;
     index index.php index_dev.php app.php app_dev.php;
 
     server_name localhost;
     ssl_certificate /etc/nginx/ssl/server.crt;
     ssl_certificate_key /etc/nginx/ssl/server.key;
 
-    location ~* ^/website/var/assets {
-        try_files $uri /index.php?$args;
-        index index.php;
-    }
-
-    location ~* ^/website/static/videos {
-        try_files $uri /index.php?$args;
-        index index.php;
-    }
-
     location / {
         satisfy any;
 
-        try_files $uri $uri/ /website/var/assets/$uri /website/static/videos/$uri /index.php?$args;
+        try_files $uri $uri/ /app.php?$args;
     }
 
     location ~ \.php$ {
