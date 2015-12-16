@@ -16,14 +16,29 @@ server {
     listen [::]:80 default_server ipv6only=on;
 
     root /opt/www/web/;
-    index index.php index_dev.php app.php app_dev.php;
 
     server_name localhost;
 
     location / {
-        satisfy any;
+        try_files $uri /app.php$is_args$args;
+    }
 
-        try_files $uri $uri/ /app.php?$args;
+    location ~ ^/(app_dev|config)\.php(/|$) {
+        fastcgi_pass unix:/var/run/php5-fpm.sock;
+        fastcgi_split_path_info ^(.+\.php)(/.*)$;
+        include fastcgi_params;
+        fastcgi_param SCRIPT_FILENAME $realpath_root$fastcgi_script_name;
+        fastcgi_param DOCUMENT_ROOT $realpath_root;
+    }
+
+    location ~ ^/app\.php(/|$) {
+        fastcgi_pass unix:/var/run/php5-fpm.sock;
+        fastcgi_split_path_info ^(.+\.php)(/.*)$;
+        include fastcgi_params;
+        fastcgi_param SCRIPT_FILENAME $realpath_root$fastcgi_script_name;
+        fastcgi_param DOCUMENT_ROOT $realpath_root;
+
+        internal;
     }
 
     location ~ \.php$ {
@@ -43,16 +58,31 @@ server {
     listen 443 ssl;
 
     root /opt/www/web/;
-    index index.php index_dev.php app.php app_dev.php;
 
     server_name localhost;
     ssl_certificate /etc/nginx/ssl/server.crt;
     ssl_certificate_key /etc/nginx/ssl/server.key;
 
     location / {
-        satisfy any;
+        try_files $uri /app.php$is_args$args;
+    }
 
-        try_files $uri $uri/ /app.php?$args;
+    location ~ ^/(app_dev|config)\.php(/|$) {
+        fastcgi_pass unix:/var/run/php5-fpm.sock;
+        fastcgi_split_path_info ^(.+\.php)(/.*)$;
+        include fastcgi_params;
+        fastcgi_param SCRIPT_FILENAME $realpath_root$fastcgi_script_name;
+        fastcgi_param DOCUMENT_ROOT $realpath_root;
+    }
+
+    location ~ ^/app\.php(/|$) {
+        fastcgi_pass unix:/var/run/php5-fpm.sock;
+        fastcgi_split_path_info ^(.+\.php)(/.*)$;
+        include fastcgi_params;
+        fastcgi_param SCRIPT_FILENAME $realpath_root$fastcgi_script_name;
+        fastcgi_param DOCUMENT_ROOT $realpath_root;
+
+        internal;
     }
 
     location ~ \.php$ {
