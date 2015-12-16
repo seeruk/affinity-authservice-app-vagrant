@@ -1,6 +1,6 @@
 ---
 machines:
-  as_web:
+  aa_web:
     hostname: "aa_web"
     ipv4: "192.168.72.10"
     playbook: "provisioning/ansible/web_server.yml"
@@ -15,7 +15,7 @@ machines:
     - guest: 443
       host: 4443
 
-  as_db:
+  aa_db:
     hostname: "aa_db"
     ipv4: "192.168.72.20"
     playbook: "provisioning/ansible/db_server.yml"
