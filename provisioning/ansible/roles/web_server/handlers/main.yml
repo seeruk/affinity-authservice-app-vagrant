@@ -1,0 +1,12 @@
+---
+- name: Restart Apache2
+  service: name=apache2 state=restarted
+
+- name: Restart HHVM
+  service: name=hhvm state=restarted
+
+- name: Restart Nginx
+  service: name=nginx state=restarted
+
+- name: Restart PHP5 FPM
+  command: service php5-fpm restart

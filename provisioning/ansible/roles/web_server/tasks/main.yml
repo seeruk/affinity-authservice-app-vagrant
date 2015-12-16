@@ -1,0 +1,8 @@
+---
+- include: nginx.yml
+- include: php5.yml
+- include: php5-fpm.yml
+
+# - include: apache2.yml
+
+# - include: hhvm.yml

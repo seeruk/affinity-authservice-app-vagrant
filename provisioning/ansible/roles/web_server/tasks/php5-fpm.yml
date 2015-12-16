@@ -1,0 +1,15 @@
+---
+- name: Install PHP5 FPM
+  apt: name={{ item }} state=present
+  with_items:
+  - php5-fpm
+
+- name: Start PHP5 FPM
+  service: name=php5-fpm state=started
+  notify:
+  - Restart Nginx
+
+- name: Install PHP5 Nginx Configuration
+  template: src=../templates/php5-nginx-php.ini.j2 dest=/etc/php5/fpm/php.ini
+  notify:
+  - Restart PHP5 FPM

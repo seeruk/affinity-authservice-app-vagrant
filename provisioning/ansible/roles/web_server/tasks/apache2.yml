@@ -1,0 +1,33 @@
+---
+- name: Install Apache2
+  apt: name=apache2 state=present
+
+- name: Intall Apache2 Document Root
+  file: src=/opt/www/public dest=/var/www/public state=link
+  notify:
+  - Restart Apache2
+
+- name: Install Apache2 vhosts
+  template: src=../templates/apache2-000-default.conf.j2 dest=/etc/apache2/sites-available/000-default.conf owner=root group=root
+  notify:
+  - Restart Apache2
+
+- name: Enable Apache2 vhosts
+  command: /usr/sbin/a2ensite 000-default creates=/etc/apache2/sites-enabled/000-default.conf
+  notify:
+  - Restart Apache2
+
+- name: Enable Apache2 mod_rewrite
+  apache2_module: name=rewrite state=present
+  notify:
+  - Restart Apache2
+
+- name: Enable Apache2 mod_headers
+  apache2_module: name=headers state=present
+  notify:
+  - Restart Apache2
+
+- name: Enable Apache2 mod_expires
+  apache2_module: name=expires state=present
+  notify:
+  - Restart Apache2

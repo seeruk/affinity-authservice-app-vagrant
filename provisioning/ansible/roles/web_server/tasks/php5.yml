@@ -1,0 +1,47 @@
+---
+- name: Install PHP5
+  apt: name={{ item }} state=present
+  with_items:
+  - php5
+  - php5-common
+  - php5-curl
+  - php5-dev
+  - php5-gd
+  - php5-imagick
+  - php5-json
+  - php5-mcrypt
+  - php5-memcached
+  - php5-mysql
+  - php5-xdebug
+  notify:
+  - Restart Nginx
+
+# - name: Install Apache2 PHP Module
+#   apt: name=libapache2-mod-php5 state=present
+#   notify:
+#   - Restart Apache2
+
+# - name: Install PHP5 Apache2 Configuration
+#   template: src=../templates/php5-apache2-php.ini.j2 dest=/etc/php5/apache2/php.ini owner=root group=root
+#   notify:
+#   - Restart Apache2
+
+# - name: Install PHP5 Phalcon Source
+#   git: repo=https://github.com/phalcon/cphalcon.git dest=/tmp/cphalcon
+
+# - name: Install PHP5 Phalcon
+#   command: >
+#     ./install
+#     chdir=/tmp/cphalcon/build
+#     creates=/usr/lib/php5/20121212/phalcon.so
+
+# - name: Install PHP5 Phalcon Module
+#   template: src='../templates/php5-20-phalcon.ini.j2' dest='/etc/php5/mods-available/20-phalcon.ini'
+
+# - name: Enable PHP5 Phalcon Module Apache2
+#   file: src=/etc/php5/mods-available/20-phalcon.ini dest=/etc/php5/apache2/conf.d/20-phalcon.ini state=link
+#   notify:
+#   - Restart Apache2
+
+# - name: Enable PHP5 Phalcon Module CLI
+#   file: src=/etc/php5/mods-available/20-phalcon.ini dest=/etc/php5/cli/conf.d/20-phalcon.ini state=link

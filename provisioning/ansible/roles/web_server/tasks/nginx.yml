@@ -1,0 +1,26 @@
+---
+- name: Install Nginx
+  apt: name=nginx state=present
+
+- name: Install Nginx Configuration
+  template: src='../templates/nginx.conf.j2' dest='/etc/nginx/nginx.conf'
+  notify:
+  - Restart Nginx
+
+- name: Install Nginx Default Virtual Host
+  template: src='../templates/default.j2' dest='/etc/nginx/sites-available/default'
+  notify:
+  - Restart Nginx
+
+- name: Create Nginx SSL directory
+  file: path=/etc/nginx/ssl state=directory
+
+- name: Install Self-Signed SSL Certificate
+  command: openssl req -new -nodes -x509 -subj "/CN=affinity-auth.local/C=GB/ST=London/L=London/O=EWB" -days 3650 -keyout /etc/nginx/ssl/server.key -out /etc/nginx/ssl/server.crt -extensions v3_ca creates=/etc/nginx/ssl/server.crt
+  notify:
+  - Restart Nginx
+
+- name: Enable Nginx Default Virtual Host
+  file: src=/etc/nginx/sites-available/default dest=/etc/nginx/sites-enabled/default state=link
+  notify:
+  - Restart Nginx

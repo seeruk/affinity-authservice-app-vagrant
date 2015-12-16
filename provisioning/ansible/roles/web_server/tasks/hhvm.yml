@@ -1,0 +1,22 @@
+---
+- name: Install HHVM Apt Key
+  apt_key: url=http://dl.hhvm.com/conf/hhvm.gpg.key
+
+- name: Install HHVM Apt Repository
+  apt_repository: repo="deb http://dl.hhvm.com/ubuntu trusty main"
+
+- name: Install HHVM
+  apt: name=hhvm state=present update_cache=yes
+  notify:
+  - Restart Nginx
+
+- name: Install Fast-CGI
+  shell: /usr/share/hhvm/install_fastcgi.sh
+  notify:
+  - Restart Nginx
+  - Restart HHVM
+
+- name: Install HHVM PHP Configuration
+  template: src=../templates/hhvm-php.ini.j2 dest=/etc/hhvm/php.ini owner=root group=root
+  notify:
+  - Restart HHVM
