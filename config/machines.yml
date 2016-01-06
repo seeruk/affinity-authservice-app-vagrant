@@ -9,11 +9,6 @@ machines:
       host: "../../byng_systems@bitbucket.org/affinity-authservice-app/"
       owner: www-data
       group: www-data
-    port_map:
-    - guest: 80
-      host: 8080
-    - guest: 443
-      host: 4443
 
   aa_db:
     hostname: "aa_db"
